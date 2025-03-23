@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
 import styles from "./navber.module.css";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faUserTie } from "@fortawesome/free-solid-svg-icons";
-import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
+import { faHouse, faUserTie, faUsers } from "@fortawesome/free-solid-svg-icons";
+
 const Navber = () => {
   const [isNavProf, setIsNavProf] = useState(false);
-
+  const location = useLocation();
   const [navRoute, setNavRoute] = useState("");
+
+  // Update active route
+  useEffect(() => {
+    const path = location.pathname.split("/")[1];
+    setNavRoute(path || "home");
+  }, [location.pathname]);
 
   // Close profile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest(`.${styles.navProf}`)) {
         setIsNavProf(false);
-      };
+      }
     };
     document.addEventListener("click", handleClickOutside);
     return () => {
@@ -22,12 +28,12 @@ const Navber = () => {
     };
   }, []);
 
-  useEffect(()=>{
-    const path = window.location.pathname.split("/")[1];
-    setNavRoute(path);
-  },[])
-
-console.log(navRoute);
+  // Navigation items list
+  const navItems = [
+    { name: "home", path: "/", icon: faHouse },
+    { name: "community", path: "/community", icon: faUsers },
+    { name: "auth", path: "/auth", label: "Login" },
+  ];
 
   return (
     <nav className={styles.navber}>
@@ -40,19 +46,26 @@ console.log(navRoute);
 
       <section className={styles.navItems}>
         <ul>
-          <li className={styles.navItem}>
-            <Link to={"/"}>
-              <FontAwesomeIcon icon={faHouse} />{" "}
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link to={"/community"}>
-              <FontAwesomeIcon icon={faUsers} />{" "}
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link to={"/auth"}>Login</Link>
-          </li>
+          {navItems.map((item) => (
+            <li
+              key={item.name}
+              className={`${styles.navItem} ${
+                navRoute === item.name ? styles.active : ""
+              }`}
+            >
+              <Link to={item.path}>
+                {item.icon ? <FontAwesomeIcon icon={item.icon} /> : item.label}
+              </Link>
+            </li>
+          ))}
+          <div
+            className={styles.activeIndicator}
+            style={{
+              left: `calc(${
+                navItems.findIndex((item) => item.name === navRoute) * 100
+              }% + 10px)`,
+            }}
+          />
         </ul>
       </section>
 
@@ -61,7 +74,7 @@ console.log(navRoute);
           <li className={styles.navItem}>
             <button
               onClick={(e) => {
-                e.stopPropagation(); // Prevents triggering the global click event
+                e.stopPropagation();
                 setIsNavProf((prev) => !prev);
               }}
             >
@@ -72,15 +85,18 @@ console.log(navRoute);
 
         {isNavProf && (
           <ul className={styles.navProfItem}>
-            <li className={styles.navItem}>
-              <Link to={"/profile"}>Profile</Link>
-            </li>
-            <li>
-              <Link to={"/setting"}>Setting</Link>
-            </li>
-            <li className={styles.navItem}>
-              <Link to={"/about"}>About</Link>
-            </li>
+            {["profile", "setting", "about"].map((item) => (
+              <li
+                key={item}
+                className={`${styles.navItem} ${
+                  navRoute === item ? styles.active : ""
+                }`}
+              >
+                <Link to={`/${item}`}>
+                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                </Link>
+              </li>
+            ))}
             <li>
               <button>LogOut</button>
             </li>

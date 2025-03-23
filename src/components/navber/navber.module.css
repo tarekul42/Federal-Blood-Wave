@@ -52,3 +52,26 @@
     border-bottom-right-radius: 3rem;
     border: 2px solid #1212;
 }
+
+
+.navItem {
+    font-size: 1.2rem;
+    position: relative;
+}
+
+.navItem a {
+    text-decoration: none;
+    color: #f5084f;
+    transition: color 0.3s ease-in-out;
+}
+
+.navItem:hover a, .navItem.active a {
+    color: #007bff;
+    font-weight: bold;
+}
+.navItem.active a {
+    border: 1px solid rgb(45, 45, 71);
+    padding: .3rem .6rem;
+    border-radius: 1rem;
+    background-color: #a0078c23;
+}
