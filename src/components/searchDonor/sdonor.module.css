@@ -1,0 +1,22 @@
+.sDonor{
+    background-color: #f5b6c94b;
+    padding: 2rem ;
+    border-radius: 1rem;
+}
+
+.sDonor form select{
+    width: 15rem;
+    height: 4rem;
+    font-size: 1.12rem;
+    border-radius: 1.5rem;
+}
+
+.sDonor form button{
+    /* height: 3rem; */
+    /* width: 5rem; */
+    font-size: 1.5rem;
+    padding: .3rem .6rem;
+    border-radius: 2rem;
+}
+
+

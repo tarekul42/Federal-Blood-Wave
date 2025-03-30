@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import SearchDonor from "../../searchDonor/SearchDonor";
 
 const Banner = () => {
-  const slideImags = [
+  const slides = [
     " https://i.ibb.co.com/Xx6RdFhL/bloodD1.png",
     " https://i.ibb.co.com/hxwhKRkf/bloodD2.png",
     " https://i.ibb.co.com/wZF62DqP/bloodD3.png",
@@ -23,31 +24,46 @@ const Banner = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrIndex((prevIndex) => {
-        if (prevIndex >= slideImags.length - 1) {
-          return 0;
-        } else {
-          return prevIndex + 1;
+        if (prevIndex >= slides.length - 1) {
+          return 0; // Loop back to the first slide
         }
+        return prevIndex + 1; // Go to the next slide
       });
-      return clearInterval(interval);
-    }, 3000);
-  }, [slideImags.length]);
+    }, 3000); // Change slide every second
+
+    return () => clearInterval(interval); // Cleanup the interval on unmount or dependency change
+  }, [slides.length]);
 
   const slideStyle = {
     width: "100%",
-    height: "95vh",
+    height: "80vh",
     // borderRadius:'1rem',
     backgroundPosition: "center",
     backgroundSize: "cover",
-    backgroundImage: `url(${slideImags[currIndex]})`,
+    backgroundImage: `url(${slides[currIndex]})`,
     // backgroundAttachment: 'fixed',
     backgroundRepeat: "no-repeat",
     transition: "all 1s ease-in-out",
   };
 
+  const slideContStyle = {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#141313ad",
+    color: "red",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    // padding: "0 5rem" ,
+    gap: "1rem",
+  };
+
   return (
     <section style={slideStyle}>
-      <h1>hello</h1>
+      <div style={slideContStyle}>
+        <SearchDonor />
+      </div>
     </section>
   );
 };

@@ -6,14 +6,16 @@ import Contact from "../components/contact/contact";
 import NotFound from "../components/notFound/404";
 import Auth from "../components/Auth/auth";
 import PrivateRoute from "./privateRoute";
+import Donors from "../components/donor/Donors.JSx";
 
 const Router = () => {
-  const auth = true;
+  const auth = false;
   return (
     <>
       <Routes>
         <Route path="*" element={<NotFound />} />
         <Route index element={<Home />} />
+        <Route path="/donor" element={<Donors />} />
 
         {auth || <Route path="/auth" element={<Auth />} />}
 

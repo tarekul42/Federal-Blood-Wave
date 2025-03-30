@@ -1,10 +1,12 @@
 import React from "react";
-
+import Banner from "./banner/Banner";
+import styles from './home.module.css';
 const Home = () => {
   return (
-    <>
-      <h1>Home</h1>
-    </>
+    <section className={styles.home}>
+      {/* <h1>Home</h1> */}
+        <Banner />
+    </section>
   );
 };
 
