@@ -46,7 +46,11 @@
 
 .auth input:focus,
 .auth select:focus {
-    border: 2px solid #ff1a1a;
+    border: 2px solid #f5cece;
+}
+
+.inpRadio{
+    transform: scale(1.5);
 }
 
 .auth button {
@@ -64,6 +68,12 @@
 .auth button:hover {
     background: #ff1a1a;
     color: white;
+}
+
+.required {
+    color: rgb(187, 255, 0);
+    font-weight: bold;
+    margin-left: 3px;
 }
 
 .controlSec {

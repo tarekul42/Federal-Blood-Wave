@@ -73,6 +73,6 @@ export const bdDivision = [
   { id: 'Kh', name: 'Khulna' },
   { id: 'Ba', name: 'Barishal' },
   { id: 'Sy', name: 'Sylhet' },
-  { id: 'Ra', name: 'Rangpur' },
+  { id: 'Ran', name: 'Rangpur' },
   { id: 'My', name: 'Mymensingh' }
 ];
