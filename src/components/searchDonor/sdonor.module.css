@@ -1,22 +1,84 @@
-.sDonor{
-    background-color: #f5b6c94b;
-    padding: 2rem ;
+/* Enhanced Search Donor Form Styling */
+.sDonor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+.sDonor::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* background: rgba(0, 0, 0, 0.5); */
+    z-index: 1;
+}
+
+.sDonor form {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
     border-radius: 1rem;
+    z-index: 2;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.sDonor form select{
+.sDonor form select {
     width: 15rem;
-    height: 4rem;
-    font-size: 1.12rem;
-    border-radius: 1.5rem;
-}
-
-.sDonor form button{
-    /* height: 3rem; */
-    /* width: 5rem; */
-    font-size: 1.5rem;
-    padding: .3rem .6rem;
+    height: 3.5rem;
+    font-size: 1.1rem;
+    border: none;
     border-radius: 2rem;
+    padding: 0 1rem;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
+.sDonor form select:hover {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
 
+.sDonor form button {
+    height: 3.5rem;
+    width: 3.5rem;
+    border: none;
+    background: #ff4b5c;
+    color: white;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sDonor form button:hover {
+    background: #ff1f3c;
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .sDonor form {
+        flex-direction: column;
+        gap: 0.8rem;
+        padding: 1rem;
+    }
+
+    .sDonor form select,
+    .sDonor form button {
+        width: 100%;
+    }
+
+    .sDonor form button {
+        border-radius: 45%;
+    }
+}
