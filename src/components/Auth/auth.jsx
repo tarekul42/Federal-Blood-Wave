@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import styles from "./auth.module.css";
 import { bangladeshiDistricts, bdDivision } from "../../db/data";
 import { api } from "../../db/api";
+import Login from "./login";
 
 const Auth = () => {
   const [isLoginAuth, setIsLoginAuth] = useState(true);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState("");
 
   const [regData, setRegData] = useState({
@@ -21,13 +22,23 @@ const Auth = () => {
     gender: "",
     dob: "",
     lastDonationDate: "",
+    bloodGroup: "",
     isSick: false,
   });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setRegData((prev) => ({
+      ...prev,
+      [name]: name === "isSick" ? value === "true" : value,
+    }));
+  };
 
   const {
     weight,
     height,
     lastDonationDate,
+    bloodGroup,
     dob,
     name,
     mail,
@@ -40,106 +51,61 @@ const Auth = () => {
     isSick,
   } = regData;
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setRegData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const bmiCalc = weight / height ** 2;
+  const bmiCalc = height > 0 ? weight / (height * height) : 0;
   const dobDate = new Date(dob);
-  const donationDate = new Date(lastDonationDate);
   const today = new Date();
 
-  // Calculate the difference in milliseconds
-  const diffInMs = today - dobDate;
+  const ageInYears = Math.ceil(
+    (today - dobDate) / (1000 * 60 * 60 * 24 * 365.25)
+  );
 
-  // Convert milliseconds to days
-  const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
-
-  const dayToYear = Math.ceil(diffInDays / 365.25);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isLoginAuth) {
-      if (bmiCalc > 19 && dayToYear > 17) {
-        fetch(`${api}/donor/register`, {
+    setIsLoading(true);
+    // console.log((today - donationDate) / (1000 * 60 * 60 * 24));
+    if (bmiCalc > 19 && ageInYears > 17) {
+      try {
+        const response = await fetch(`${api}/donor/register`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             weight,
             height,
-            lastDonationDate: donationDate,
+            lastDonationDate,
             dob: dobDate,
             name,
             mail,
             phone,
             password,
+            bloodGroup,
             address,
             city,
             district,
             gender,
             isSick,
           }),
-        })
-          .then((res) => res.json())
-          .then((res) => {
-            console.log(res);
-          });
-      } else {
-        setErr("Your health is not prepare for Blood dontaion. ");
-        alert("Your Body is not prepare for Blood dontaion. ");
+        });
+
+        const data = await response.json();
+        console.log(data);
+        alert("Registration successful!");
+      } catch (error) {
+        console.error(error);
+        setErr("Registration failed. Please try again.");
+      } finally {
+        setIsLoading(false);
       }
     } else {
-      fetch(`${api}/donor/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          mail,
-          password,
-        }),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res);
-        });
+      setErr("Your health is not prepared for blood donation.");
+      alert("Your body is not prepared for blood donation.");
+      setIsLoading(false);
     }
   };
 
   return (
     <aside className={styles.auth}>
       {isLoginAuth ? (
-        <section className={styles.loginAuth}>
-          <h2>Login</h2>
-          <form onSubmit={handleSubmit}>
-            <label>
-              Email <span className={styles.required}>*</span>
-            </label>
-            <input
-              type="email"
-              name="mail"
-              placeholder="Email"
-              onChange={handleChange}
-              required
-            />
-
-            <label>
-              Password <span className={styles.required}>*</span>
-            </label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              onChange={handleChange}
-              required
-            />
-
-            <button type="submit">Log In</button>
-          </form>
-        </section>
+        <Login />
       ) : (
         <section className={styles.signUpAuth}>
           <h2>Sign Up</h2>
@@ -151,6 +117,7 @@ const Auth = () => {
               type="text"
               name="name"
               placeholder="Full Name"
+              value={name}
               onChange={handleChange}
               required
             />
@@ -162,6 +129,7 @@ const Auth = () => {
               type="email"
               name="mail"
               placeholder="Email"
+              value={mail}
               onChange={handleChange}
               required
             />
@@ -173,6 +141,7 @@ const Auth = () => {
               type="tel"
               name="phone"
               placeholder="Phone"
+              value={phone}
               onChange={handleChange}
               required
             />
@@ -184,6 +153,7 @@ const Auth = () => {
               type="password"
               name="password"
               placeholder="Password"
+              value={password}
               onChange={handleChange}
               required
             />
@@ -193,6 +163,7 @@ const Auth = () => {
               type="text"
               name="address"
               placeholder="Address"
+              value={address}
               onChange={handleChange}
             />
 
@@ -203,6 +174,7 @@ const Auth = () => {
               type="number"
               name="weight"
               placeholder="Weight (kg)"
+              value={weight}
               onChange={handleChange}
               step="0.01"
               required
@@ -215,15 +187,36 @@ const Auth = () => {
               type="number"
               name="height"
               placeholder="Height (m)"
+              value={height}
               onChange={handleChange}
               step="0.01"
               required
             />
 
             <label>
+              Blood Group <span className={styles.required}>*</span>
+            </label>
+            <select
+              name="bloodGroup"
+              value={bloodGroup}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Blood Group</option>
+              <option value="A+ev">A+</option>
+              <option value="A-ev">A-</option>
+              <option value="B+ev">B+</option>
+              <option value="B-ev">B-</option>
+              <option value="O+ev">O+</option>
+              <option value="O-ev">O-</option>
+              <option value="AB+ev">AB+</option>
+              <option value="AB-ev">AB-</option>
+            </select>
+
+            <label>
               City <span className={styles.required}>*</span>
             </label>
-            <select name="city" onChange={handleChange} required>
+            <select name="city" value={city} onChange={handleChange} required>
               <option value="">Select City</option>
               {bdDivision.map((data) => (
                 <option value={data.name} key={data.id}>
@@ -235,7 +228,12 @@ const Auth = () => {
             <label>
               District <span className={styles.required}>*</span>
             </label>
-            <select name="district" onChange={handleChange} required>
+            <select
+              name="district"
+              value={district}
+              onChange={handleChange}
+              required
+            >
               <option value="">Select District</option>
               {bangladeshiDistricts.map((data) => (
                 <option value={data.name} key={data.id}>
@@ -247,7 +245,12 @@ const Auth = () => {
             <label>
               Gender <span className={styles.required}>*</span>
             </label>
-            <select name="gender" onChange={handleChange} required>
+            <select
+              name="gender"
+              value={gender}
+              onChange={handleChange}
+              required
+            >
               <option value="">Select Gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
@@ -257,12 +260,19 @@ const Auth = () => {
             <label>
               Date of Birth <span className={styles.required}>*</span>
             </label>
-            <input type="date" name="dob" onChange={handleChange} required />
+            <input
+              type="date"
+              name="dob"
+              value={dob}
+              onChange={handleChange}
+              required
+            />
 
             <label>Last Donation Date</label>
             <input
               type="date"
               name="lastDonationDate"
+              value={lastDonationDate}
               onChange={handleChange}
             />
 
@@ -270,45 +280,35 @@ const Auth = () => {
               Are you sick right now? <span className={styles.required}>*</span>
             </label>
             <div>
-              <label>
-                <input
-                  type="radio"
-                  name="isSick"
-                  value={true}
-                  onChange={handleChange}
-                  className={styles.inpRadio}
-                />{" "}
-                Yes
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="isSick"
-                  value={false}
-                  onChange={handleChange}
-                  className={styles.inpRadio}
-                  defaultChecked
-                />{" "}
-                No
-              </label>
+              <input
+                type="radio"
+                name="isSick"
+                value="true"
+                onChange={handleChange}
+              />{" "}
+              Yes
+              <input
+                type="radio"
+                name="isSick"
+                value="false"
+                onChange={handleChange}
+                defaultChecked
+              />{" "}
+              No
             </div>
 
-            <button type="submit">Register</button>
+            <button type="submit" disabled={isLoading}>
+              {isLoading ? "Registering..." : "Register"}
+            </button>
           </form>
         </section>
       )}
 
       <section className={styles.controlSec}>
         {isLoginAuth ? (
-          <>
-            <p>Don't have an account?</p>
-            <button onClick={() => setIsLoginAuth(false)}>Sign Up</button>
-          </>
+          <button onClick={() => setIsLoginAuth(false)}>Sign Up</button>
         ) : (
-          <>
-            <p>Already have an account?</p>
-            <button onClick={() => setIsLoginAuth(true)}>Log In</button>
-          </>
+          <button onClick={() => setIsLoginAuth(true)}>Log In</button>
         )}
       </section>
     </aside>
