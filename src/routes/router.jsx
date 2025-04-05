@@ -7,9 +7,10 @@ import NotFound from "../components/notFound/404";
 import Auth from "../components/Auth/auth";
 import PrivateRoute from "./privateRoute";
 import Donors from "../components/donor/Donors.JSx";
+import { useAuth } from "../App";
 
 const Router = () => {
-  const auth = false;
+  const {isAuth} = useAuth();
   return (
     <>
       <Routes>
@@ -17,9 +18,9 @@ const Router = () => {
         <Route index element={<Home />} />
         <Route path="/donor" element={<Donors />} />
 
-        {auth || <Route path="/auth" element={<Auth />} />}
+        {isAuth || <Route path="/auth" element={<Auth />} />}
 
-        <Route path="/" element={<PrivateRoute loginAuth={auth} />}>
+        <Route path="/" element={<PrivateRoute loginAuth={isAuth} />}>
           <Route path="contact" element={<Contact />} />
           <Route path="about" element={<About />} />
         </Route>

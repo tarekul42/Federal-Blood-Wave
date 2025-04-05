@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styles from "./navber.module.css";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useRoutes } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faUserTie, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../../App";
+import { api } from "../../db/api";
 
 const Navber = () => {
   const [isNavProf, setIsNavProf] = useState(false);
   const location = useLocation();
   const [navRoute, setNavRoute] = useState("");
+
+  const { isAuth } = useAuth();
 
   // Update active route
   useEffect(() => {
@@ -32,8 +36,30 @@ const Navber = () => {
   const navItems = [
     { name: "home", path: "/", icon: faHouse },
     { name: "community", path: "/community", icon: faUsers },
-    { name: "auth", path: "/auth", label: "Login" },
+    isAuth || { name: "auth", path: "/auth", label: "Login" },
   ];
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogOut = () => {
+    setIsLoading(true);
+    try {
+      fetch(`${api}/donor/signOut`, {
+        method: "POST",
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          alert(res.message);
+          // location.
+        });
+    } catch (error) {
+      console.log(error);
+      alert(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <nav className={styles.navber}>
@@ -46,9 +72,9 @@ const Navber = () => {
 
       <section className={styles.navItems}>
         <ul>
-          {navItems.map((item) => (
+          {navItems.map((item, index) => (
             <li
-              key={item.name}
+              key={`${item.name + index}`}
               className={`${styles.navItem} ${
                 navRoute === item.name ? styles.active : ""
               }`}
@@ -85,7 +111,13 @@ const Navber = () => {
 
         {isNavProf && (
           <ul className={styles.navProfItem}>
-            {["profile", "setting", "about"].map((item) => (
+            {[
+              isAuth && "profile",
+              isAuth && "setting",
+              "about",
+              "terms",
+              "contact",
+            ].map((item) => (
               <li
                 key={item}
                 className={`${styles.navItem} ${
@@ -98,7 +130,15 @@ const Navber = () => {
               </li>
             ))}
             <li>
-              <button>LogOut</button>
+              {isAuth && (
+                <button onClick={handleLogOut} disabled={isLoading}>
+                  {isLoading ? (
+                    <span className={styles.loader}></span>
+                  ) : (
+                    "LOGOUT"
+                  )}
+                </button>
+              )}
             </li>
           </ul>
         )}
