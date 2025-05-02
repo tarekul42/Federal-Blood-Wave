@@ -12,6 +12,15 @@ import { Link } from "react-router";
 import PostLike from "./postLike";
 import EditP from "../editPost/EditP";
 import { api } from "../../../db/api";
+import Popup from "../../popup/popup";
+import SfLoading from "../../loading/slfLoad";
+import {
+  faFacebook,
+  faInstagram,
+  faLinkedin,
+  faSquareWhatsapp,
+  faXTwitter,
+} from "@fortawesome/free-brands-svg-icons";
 
 const PostCard = ({ data }) => {
   const {
@@ -24,24 +33,37 @@ const PostCard = ({ data }) => {
     likes,
   } = data;
   // console.log(data);
-  const [actionBarControl, setActionBarControl] = useState(false);
   const [currIndex, setCurrIndex] = useState(0);
+
+  const [popInfo, setPopInfo] = useState({
+    trigger: null,
+    type: null,
+    message: null,
+  });
 
   // Format date
   const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString("en-US");
 
   // Handle ActionBar toggle
+  const [actionBarControl, setActionBarControl] = useState(false);
   const handleActionBar = (id) => {
     if (id === _id) {
       setActionBarControl((prev) => !prev);
+      setisShareOpen(false);
     }
   };
-
+  const [isShareOpen, setisShareOpen] = useState(false);
+  const handleShareOpen = (id) => {
+    if (id === _id) {
+      setisShareOpen((prev) => !prev);
+    }
+  };
   // Hide action bar when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest(`.${styles.postAct}`)) {
         setActionBarControl(false);
+        setisShareOpen(false);
       }
     };
     document.addEventListener("click", handleClickOutside);
@@ -72,30 +94,50 @@ const PostCard = ({ data }) => {
       setPostData({ _id, caption, photos });
     }
   };
-
+  const [deleteLoading, setDeleteLoad] = useState(null);
   const deletePost = async (postId) => {
+    setDeleteLoad(postId);
     try {
-      const response = await fetch(
-        `${api}/community/delete/${postId}/`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${api}/community/delete/${postId}/`, {
+        method: "DELETE",
+        credentials: "include",
+      });
 
       const getData = await response.json();
-
+      setPopInfo({
+        trigger: Date.now(),
+        type: getData?.success,
+        message: getData?.message,
+      });
       if (getData?.success === true) {
-        setPostData((prev) => ({
-          ...prev,
-          photos: prev.photos?.filter((img) => img?.imgId !== photoId),
-        }));
+        setTimeout(() => {
+          window.location.reload();
+          setActionBarControl((prev) => !prev);
+        }, 3000);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setDeleteLoad(null);
     }
   };
 
+  /* Share Action---> */
+  const shareUrl = encodeURIComponent(`${window.location.origin}/post/${_id}`);
+
+  const shareLinks = {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`,
+    linkedIn: `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`,
+    twitter: `https://twitter.com/intent/tweet?url=${shareUrl}`,
+    whatsapp: `https://wa.me/?text=${shareUrl}`,
+  };
+  const openShareWindow = (url) => {
+    window.open(
+      url,
+      "_blank",
+      "toolbar=no,scrollbars=yes,resizable=yes,top=100,left=500,width=600,height=500"
+    );
+  };
   return (
     <div className={styles.postCard}>
       <div className={styles.postUp}>
@@ -119,35 +161,73 @@ const PostCard = ({ data }) => {
             className={styles.actionBar}
             style={{ display: actionBarControl ? "flex" : "none" }}
           >
-            <li>
-              <Link to="#" onClick={() => handleEditOpen(_id)}>
-                <button>
-                  <FontAwesomeIcon icon={faPencilAlt} /> Edit
-                </button>
-              </Link>
-            </li>
-            <li>
-              <Link to="/#">
-                <button>
-                  <FontAwesomeIcon icon={faClipboard} /> Copy Link
-                </button>
-              </Link>
-            </li>
-            <li>
-              <Link to="#">
-                <button>
-                  <FontAwesomeIcon icon={faTrash} /> Delete
-                </button>
-              </Link>
-            </li>
-            <li>
-              <Link to="/#">
-                <button>
-                  <FontAwesomeIcon icon={faShare} /> Share
-                </button>
-              </Link>
-            </li>
+            {deleteLoading ? (
+              <SfLoading />
+            ) : (
+              <>
+                <li>
+                  <Link to="#" onClick={() => handleEditOpen(_id)}>
+                    <button>
+                      <FontAwesomeIcon icon={faPencilAlt} /> Edit
+                    </button>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="#">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          `${window.location.origin}/post/${_id}`
+                        );
+                        setPopInfo({
+                          trigger: Date.now(),
+                          type: true,
+                          message: "Link copied to clipboard!",
+                        });
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faClipboard} /> Copy Link
+                    </button>
+                  </Link>
+                </li>
+                <li>
+                  {/* <Link to="#" > */}
+                  <button onClick={() => deletePost(_id)}>
+                    <FontAwesomeIcon icon={faTrash} /> Delete
+                  </button>
+                  {/* </Link> */}
+                </li>
+                <li>
+                  {/* <Link to="#"> */}
+                  <button onClick={() => handleShareOpen(_id)}>
+                    <FontAwesomeIcon icon={faShare} /> Share
+                  </button>
+                  {/* </Link> */}
+                </li>
+              </>
+            )}
           </ul>
+
+          <div
+            className={styles.shareOpt}
+            style={{ display: isShareOpen ? "flex" : "none" }}
+          >
+            <button onClick={() => openShareWindow(shareLinks?.facebook)}>
+              <FontAwesomeIcon icon={faFacebook} />
+            </button>
+
+            <button onClick={() => openShareWindow(shareLinks?.twitter)}>
+              <FontAwesomeIcon icon={faXTwitter} />
+            </button>
+
+            <button onClick={() => openShareWindow(shareLinks?.linkedIn)}>
+              <FontAwesomeIcon icon={faLinkedin} />
+            </button>
+
+            <button onClick={() => openShareWindow(shareLinks?.whatsapp)}>
+              <FontAwesomeIcon icon={faSquareWhatsapp} />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -158,27 +238,30 @@ const PostCard = ({ data }) => {
           <pre>{caption.trim()}</pre>
         </div>
 
-        <div className={styles.photos}>
-          <button
-            className={styles.preBtn}
-            onClick={previous}
-            disabled={currIndex === 0}
-          >
-            &#10094;
-          </button>
-
-          <div className={styles.images}>
-            <img src={photos[currIndex]?.photo} alt={`post-${currIndex + 1}`} />
+        {photos?.length > 0 && (
+          <div className={styles.photos}>
+            <button
+              className={styles.preBtn}
+              onClick={previous}
+              disabled={currIndex === 0}
+            >
+              &#10094;
+            </button>
+            <div className={styles.images}>
+              <img
+                src={photos[currIndex]?.photo}
+                alt={`post-${currIndex + 1}`}
+              />
+            </div>
+            <button
+              className={styles.nextBtn}
+              onClick={next}
+              disabled={currIndex === photos.length - 1}
+            >
+              &#10095;
+            </button>
           </div>
-
-          <button
-            className={styles.nextBtn}
-            onClick={next}
-            disabled={currIndex === photos.length - 1}
-          >
-            &#10095;
-          </button>
-        </div>
+        )}
       </div>
 
       <hr className={styles.hr} />
@@ -192,6 +275,7 @@ const PostCard = ({ data }) => {
         postData={postData}
         setPostData={setPostData}
       />
+      <Popup popInfo={popInfo} />
     </div>
   );
 };
