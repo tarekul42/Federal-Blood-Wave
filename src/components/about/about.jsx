@@ -122,6 +122,9 @@ const About = () => {
             <Link to={"https://abdullah-shayed.vercel.app/about"} target="_blank">
               <FontAwesomeIcon icon={faEarth} />
             </Link>
+            <Link to={"mailto:abdullah.shayed@protonmail.com"} target="_blank">
+              📧
+            </Link>
           </div>
         </div>
       </div>
