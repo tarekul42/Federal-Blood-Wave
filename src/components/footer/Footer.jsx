@@ -8,6 +8,7 @@ import {
   faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import logo from "../../assets/logo.png";
+import { Link } from "react-router";
 
 const Footer = () => {
   return (
@@ -24,19 +25,19 @@ const Footer = () => {
           <h4>গুরুত্বপূর্ণ লিংক</h4>
           <ul>
             <li>
-              <a href="/">Home</a>
+              <Link to="/">Home</Link>
             </li>
             <li>
-              <a href="/about">AboutUs</a>
+              <Link to="/about">AboutUs</Link>
             </li>
             <li>
-              <a href="/community">community</a>
+              <Link to="/community">community</Link>
             </li>
             <li>
-              <a href="/terms">Terms&Condition</a>
+              <Link to="/terms">Terms&Condition</Link>
             </li>
             <li>
-              <a href="/contact">Contact</a>
+              <Link to="/contact">Contact</Link>
             </li>
           </ul>
         </div>
@@ -65,18 +66,18 @@ const Footer = () => {
         <div className={styles.footerSocial}>
           <h4>আমাদের অনুসরণ করুন</h4>
           <div className={styles.socialIcons}>
-            <a href="#">
+            <Link to="https://www.facebook.com/federalbloodwave" target="_blank">
               <FontAwesomeIcon icon={faFacebook} />
-            </a>
-            <a href="#">
+            </Link>
+            <Link to="#">
               <FontAwesomeIcon icon={faXTwitter} />
-            </a>
-            <a href="#">
+            </Link>
+            <Link to="https://www.instagram.com/federalbloodwave.orga/" target="_blank">
               <FontAwesomeIcon icon={faInstagram} />
-            </a>
-            <a href="#">
+            </Link>
+            <Link to="#">
               <FontAwesomeIcon icon={faLinkedinIn} />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
