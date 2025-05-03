@@ -6,7 +6,7 @@ import Contact from "../components/contact/contact";
 import NotFound from "../components/notFound/404";
 import Auth from "../components/Auth/auth";
 import PrivateRoute from "./privateRoute";
-import Donors from "../components/donor/Donors.JSx";
+import Donors from "../components/donor/Donors";
 import { useAuth } from "../App";
 import Profile from "../components/profile/profile";
 import Settings from "../components/setting/setting";
