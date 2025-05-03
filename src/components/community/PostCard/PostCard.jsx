@@ -16,16 +16,17 @@ import Popup from "../../popup/popup";
 import SfLoading from "../../loading/slfLoad";
 import {
   faFacebook,
-  faInstagram,
   faLinkedin,
   faSquareWhatsapp,
   faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
+import { useAuth } from "../../../App";
 
 const PostCard = ({ data }) => {
   const {
     _id,
     uName,
+    userId,
     photos = [],
     uProfile,
     createdAt,
@@ -33,6 +34,7 @@ const PostCard = ({ data }) => {
     likes,
   } = data;
   // console.log(data);
+  const { profData } = useAuth();
   const [currIndex, setCurrIndex] = useState(0);
 
   const [popInfo, setPopInfo] = useState({
@@ -165,13 +167,26 @@ const PostCard = ({ data }) => {
               <SfLoading />
             ) : (
               <>
-                <li>
-                  <Link to="#" onClick={() => handleEditOpen(_id)}>
-                    <button>
-                      <FontAwesomeIcon icon={faPencilAlt} /> Edit
-                    </button>
-                  </Link>
-                </li>
+                {profData?._id === userId && (
+                  <>
+                    <li>
+                      <Link to="#" onClick={() => handleEditOpen(_id)}>
+                        <button>
+                          <FontAwesomeIcon icon={faPencilAlt} /> Edit
+                        </button>
+                      </Link>
+                    </li>
+
+                    <li>
+                      {/* <Link to="#" > */}
+                      <button onClick={() => deletePost(_id)}>
+                        <FontAwesomeIcon icon={faTrash} /> Delete
+                      </button>
+                      {/* </Link> */}
+                    </li>
+                  </>
+                )}
+
                 <li>
                   <Link to="#">
                     <button
@@ -190,13 +205,7 @@ const PostCard = ({ data }) => {
                     </button>
                   </Link>
                 </li>
-                <li>
-                  {/* <Link to="#" > */}
-                  <button onClick={() => deletePost(_id)}>
-                    <FontAwesomeIcon icon={faTrash} /> Delete
-                  </button>
-                  {/* </Link> */}
-                </li>
+
                 <li>
                   {/* <Link to="#"> */}
                   <button onClick={() => handleShareOpen(_id)}>
