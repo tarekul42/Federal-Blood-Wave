@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./auth.module.css";
 import { api } from "../../db/api";
 import Login from "./login";
 import { dhakaThana } from "../../db/data";
 import Popup from "../popup/popup";
 import SfLoading from "../loading/slfLoad";
+import JoinRules from "./joinRulesModal/JoinRules";
+import { Link } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const Auth = () => {
   const [isLoginAuth, setIsLoginAuth] = useState(true);
@@ -59,6 +63,7 @@ const Auth = () => {
     isSick,
   } = regData;
 
+  /*BMI Calculator--> */
   const heightInMeters =
     heightFeet && heightInch
       ? parseInt(heightFeet) * 0.3048 + parseInt(heightInch) * 0.0254
@@ -66,11 +71,27 @@ const Auth = () => {
   const bmiCalc =
     heightInMeters > 0 ? weight / (heightInMeters * heightInMeters) : 0;
 
+  /*AGE Calculator--> */
   const dobDate = new Date(dob);
   const today = new Date();
   const ageInYears = Math.floor(
     (today - dobDate) / (1000 * 60 * 60 * 24 * 365.25)
   );
+
+  /**Join Rules Open fucnction--> */
+  const [isJoinOpen, setIsJoinOpen] = useState(false);
+  useEffect(() => {
+    if (!isLoginAuth) {
+      setIsJoinOpen(true);
+    }
+  }, [isLoginAuth]);
+
+  /**Accept Terms---> */
+  const [accepted, setAccepted] = useState(false);
+
+  const handleCheckboxChange = (e) => {
+    setAccepted(e.target.checked);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -333,9 +354,25 @@ const Auth = () => {
               </label>
             </div>
 
+            <div className={styles.termsLabel}>
+              <input
+                type="checkbox"
+                name="termsAcc"
+                id="termsAcc"
+                checked={accepted}
+                onChange={handleCheckboxChange}
+              />
+              <p>
+                By Accepting Our Terms & Conditions{" "}
+                <Link to={"/terms"} style={{ color: "blueviolet" }}>
+                  Trems <FontAwesomeIcon icon={faArrowRight}/>
+                </Link>{" "}
+              </p>
+            </div>
+
             {err && <p className={styles.error}>{err}</p>}
 
-            <button type="submit" disabled={isLoading}>
+            <button type="submit" disabled={isLoading || !accepted}>
               {isLoading ? <SfLoading /> : "Register"}
             </button>
           </form>
@@ -358,6 +395,7 @@ const Auth = () => {
         )}
       </section>
       <Popup popInfo={popInfo} />
+      <JoinRules open={isJoinOpen} setOpen={setIsJoinOpen} />
     </aside>
   );
 };

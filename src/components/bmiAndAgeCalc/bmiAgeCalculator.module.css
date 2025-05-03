@@ -25,6 +25,11 @@
     margin-bottom: 30px;
 }
 
+.section label {
+    color: #10939c;
+    font-weight: 700;
+}
+
 .input {
     width: 100%;
     padding: 10px;
