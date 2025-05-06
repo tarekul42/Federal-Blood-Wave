@@ -5,6 +5,7 @@ import Navber from "./components/navber/navber";
 import Router from "./routes/router";
 import { api } from "./db/api";
 import Loading from "./components/loading/loading";
+import ScrollToTop from "./ScrollToTop";
 
 const AuthContext = createContext();
 
@@ -56,6 +57,7 @@ function App() {
         <Loading />
       ) : (
         <>
+          <ScrollToTop/>
           <Navber />
           <Router />
           <Footer />
