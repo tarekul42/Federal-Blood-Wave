@@ -16,7 +16,7 @@ const Navber = () => {
   const [isNavProf, setIsNavProf] = useState(false);
   const [navRoute, setNavRoute] = useState("");
 
-  const { isAuth } = useAuth();
+  const { isAuth, token, setAccessToken } = useAuth();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -55,13 +55,16 @@ const Navber = () => {
     try {
       fetch(`${api}/donor/signOut`, {
         method: "POST",
-        credentials: "include",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       })
         .then((res) => res.json())
         .then((res) => {
           navigate("/", {
             replace: true,
           });
+          setAccessToken(null);
           window.location.reload();
         });
     } catch (error) {
@@ -84,7 +87,10 @@ const Navber = () => {
           <p className={styles.message}>
             আপনার একটি দান আমাদের কার্যক্রমকে এগিয়ে নিতে সহায়তা করবে
           </p>
-          <button className={styles.donateBtn} onClick={()=>setIsDModal(true)}>
+          <button
+            className={styles.donateBtn}
+            onClick={() => setIsDModal(true)}
+          >
             <FontAwesomeIcon
               icon={faHandHoldingHeart}
               className={styles.icon}

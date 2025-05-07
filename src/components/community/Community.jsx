@@ -4,8 +4,11 @@ import styles from "./community.module.css";
 import { api } from "../../db/api";
 import Loading from "../loading/loading";
 import PostCard from "./PostCard/PostCard";
+import { useAuth } from "../../App";
 
 const Community = () => {
+  const { token } = useAuth();
+
   const [openCrp, setOpenCrp] = useState(false);
   const [allPosts, setAllPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +41,10 @@ const Community = () => {
         const res = await fetch(
           `${api}/community/allPost?page=${page}&limit=10`,
           {
-            credentials: "include",
+            method: "GET",
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
           }
         );
         const data = await res.json();

@@ -3,6 +3,7 @@ import styles from "./auth.module.css";
 import { api } from "../../db/api";
 import { useNavigate } from "react-router";
 import Popup from "../popup/popup";
+import { useAuth } from "../../App";
 
 const Login = () => {
   const [regData, setRegData] = useState({
@@ -10,6 +11,7 @@ const Login = () => {
     password: "",
   });
   const navigate = useNavigate();
+  const {setAccessToken}=useAuth()
 
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState("");
@@ -37,7 +39,7 @@ const Login = () => {
       const response = await fetch(`${api}/donor/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // Important for cookies
+        credentials: "include", // set Cookies
         body: JSON.stringify({
           mail,
           password,
@@ -56,6 +58,7 @@ const Login = () => {
           navigate("/", {
             replace: true,
           });
+          setAccessToken(data?.token)
           location.reload();
         }, 3000);
         

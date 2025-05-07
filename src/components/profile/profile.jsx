@@ -5,7 +5,7 @@ import { useAuth } from "../../App";
 import { api } from "../../db/api";
 
 const Profile = () => {
-  const { profData } = useAuth();
+  const { profData, token } = useAuth();
 
   const {
     name,
@@ -32,7 +32,9 @@ const Profile = () => {
     setIsLoading(true);
     fetch(`${api}/donor/veriFyMailSend`, {
       method: "POST",
-      credentials: "include",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => res.json())
       .then((res) => {
@@ -51,7 +53,9 @@ const Profile = () => {
     setIsLoading(true);
     fetch(`${api}/donor/update/donateStatus`, {
       method: "PATCH",
-      credentials: "include",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => res.json())
       .then((res) => {

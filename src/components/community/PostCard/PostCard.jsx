@@ -23,6 +23,7 @@ import {
 import { useAuth } from "../../../App";
 
 const PostCard = ({ data }) => {
+
   const {
     _id,
     uName,
@@ -34,7 +35,7 @@ const PostCard = ({ data }) => {
     likes,
   } = data;
   // console.log(data);
-  const { profData } = useAuth();
+  const { profData ,token} = useAuth();
   const [currIndex, setCurrIndex] = useState(0);
 
   const [popInfo, setPopInfo] = useState({
@@ -102,7 +103,9 @@ const PostCard = ({ data }) => {
     try {
       const response = await fetch(`${api}/community/delete/${postId}/`, {
         method: "DELETE",
-        credentials: "include",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       });
 
       const getData = await response.json();

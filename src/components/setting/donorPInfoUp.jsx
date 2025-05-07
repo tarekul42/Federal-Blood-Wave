@@ -7,7 +7,7 @@ import SfLoading from "../loading/slfLoad";
 import Popup from "../popup/popup";
 
 const DonorInfuUpdate = () => {
-  const { profData } = useAuth();
+  const { profData, token } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [popInfo, setPopInfo] = useState({
     trigger: null,
@@ -42,6 +42,7 @@ const DonorInfuUpdate = () => {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
         },
         credentials: "include",
         body: JSON.stringify({ name, address, phone, thana }),
@@ -49,7 +50,7 @@ const DonorInfuUpdate = () => {
 
       const data = await respons.json();
       setPopInfo({
-        trigger: Date.now(), 
+        trigger: Date.now(),
         type: data?.success,
         message: data?.message,
       });
@@ -57,7 +58,7 @@ const DonorInfuUpdate = () => {
       if (data?.success === true) {
         setTimeout(() => {
           location.reload();
-        }, 3000); 
+        }, 3000);
       }
     } catch (error) {
       console.log(error);

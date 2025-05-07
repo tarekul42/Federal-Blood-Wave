@@ -3,8 +3,11 @@ import styles from "./createPost.module.css";
 import { api } from "../../../db/api";
 import SfLoading from "../../loading/slfLoad";
 import Popup from "../../popup/popup";
+import { useAuth } from "../../../App";
 
 export default function CreatePost({ setOpen, setNewPost }) {
+  const {  token } = useAuth();
+
   const [caption, setCaption] = useState("");
   const [imageFiles, setImageFiles] = useState([]);
   const [images, setImages] = useState([]);
@@ -41,7 +44,9 @@ export default function CreatePost({ setOpen, setNewPost }) {
     try {
       const response = await fetch(`${api}/community/createPost`, {
         method: "POST",
-        credentials: "include",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
         body: formData,
       });
 

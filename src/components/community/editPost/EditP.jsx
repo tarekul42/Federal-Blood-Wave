@@ -4,9 +4,12 @@ import Loading from "../../loading/loading";
 import { api } from "../../../db/api";
 import SfLoading from "../../loading/slfLoad";
 import Popup from "../../popup/popup";
+import { useAuth } from "../../../App";
 
 const EditP = ({ open, setOpen, postData, setPostData }) => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const { token } = useAuth();
 
   let { photos = [], _id } = postData ? postData : {};
 
@@ -83,7 +86,9 @@ const EditP = ({ open, setOpen, postData, setPostData }) => {
     try {
       const response = await fetch(`${api}/community/update/${_id}`, {
         method: "PATCH",
-        credentials: "include",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
         body: formData,
       });
 

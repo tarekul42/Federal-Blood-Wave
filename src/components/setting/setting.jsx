@@ -11,7 +11,7 @@ import { api } from "../../db/api";
 
 const Settings = () => {
   const [phyCon, setPhyCon] = useState(null);
-  const { profData } = useAuth();
+  const { profData ,token} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [popInfo, setPopInfo] = useState({
     trigger: null,
@@ -33,6 +33,7 @@ const Settings = () => {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
         },
         credentials: "include",
         body: JSON.stringify({ isSeak: phyCon }),

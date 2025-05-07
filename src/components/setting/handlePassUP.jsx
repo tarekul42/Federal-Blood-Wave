@@ -3,8 +3,10 @@ import styles from "./settings.module.css";
 import SfLoading from "../loading/slfLoad";
 import Popup from "../popup/popup";
 import { api } from "../../db/api";
+import { useAuth } from "../../App";
 
 const HandlePassUp = () => {
+  const {token}=useAuth();
   const [passwords, setPasswords] = useState({ currentPass: "", newPass: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [popInfo, setPopInfo] = useState({
@@ -24,6 +26,7 @@ const HandlePassUp = () => {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
         },
         credentials: "include",
         body: JSON.stringify({ currentPass, newPass }),

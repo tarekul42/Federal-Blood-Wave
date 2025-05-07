@@ -6,7 +6,7 @@ import { api } from "../../db/api";
 import { useAuth } from "../../App";
 
 const ImageUp = () => {
-  const { profData } = useAuth();
+  const { profData ,token} = useAuth();
 
   const [dp, setDp] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +55,9 @@ const ImageUp = () => {
     try {
       const respons = await fetch(`${api}/donor/update/photo`, {
         method: "PATCH",
-        credentials: "include",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
         body: formData,
       });
 

@@ -16,7 +16,6 @@ const MailVerified = () => {
     setLoading(true);
     fetch(`${api}/donor/verifyMail/${token}`, {
       method: "PATCH",
-      credentials: "include",
     })
       .then((res) => res.json())
       .then((res) => {
