@@ -11,13 +11,18 @@ import {
 import { useAuth } from "../../App";
 import { api } from "../../db/api";
 import DonationM from "../DonationM/DonationM";
+import Popup from "../popup/popup";
 
 const Navber = () => {
   const [isNavProf, setIsNavProf] = useState(false);
   const [navRoute, setNavRoute] = useState("");
 
   const { isAuth, token, setAccessToken } = useAuth();
-
+  const [popInfo, setPopInfo] = useState({
+    trigger: null,
+    type: null,
+    message: null,
+  });
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -50,23 +55,30 @@ const Navber = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogOut = () => {
+  const handleLogOut = async () => {
     setIsLoading(true);
     try {
-      fetch(`${api}/donor/signOut`, {
+      const resposne = await fetch(`${api}/donor/signOut`, {
         method: "POST",
         headers: {
           authorization: `Bearer ${token}`,
         },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          navigate("/", {
-            replace: true,
-          });
-          setAccessToken(null);
-          window.location.reload();
+        credentials: "include",
+      });
+      const data = await resposne.json();
+      setPopInfo({
+        trigger: Date.now(),
+        type: data?.success,
+        message: data?.message,
+      });
+      if (data?.success) {
+        navigate("/", {
+          replace: true,
         });
+        setAccessToken("");
+        window.location.reload();
+      }
+      console.log(data);
     } catch (error) {
       console.log(error);
       alert(error.message);
@@ -210,6 +222,7 @@ const Navber = () => {
         </section>
       </aside>
       <DonationM open={isDModal} setOpen={setIsDModal} />
+      <Popup popInfo={popInfo}/>
     </nav>
   );
 };
