@@ -78,7 +78,7 @@ const Navber = () => {
         setAccessToken("");
         window.location.reload();
       }
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.log(error);
       alert(error.message);
