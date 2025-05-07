@@ -1,1 +1,1 @@
-export const api = 'http://localhost:1977/api/v1'
+export const api = 'https://api-federalbloodwave.onrender.com/api/v1'
