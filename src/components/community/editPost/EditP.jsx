@@ -54,7 +54,9 @@ const EditP = ({ open, setOpen, postData, setPostData }) => {
         `${api}/community/imgae/delete/${_id}/${photoId}`,
         {
           method: "DELETE",
-          credentials: "include",
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
         }
       );
 
