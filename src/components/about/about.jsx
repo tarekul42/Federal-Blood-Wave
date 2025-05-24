@@ -83,9 +83,9 @@ const About = () => {
             <img src={founderImg} alt="Founder" className={styles.founderImg} />
             <p>
               <strong style={{ fontSize: "1.5rem" }}>Hi</strong> আমি আবদুল্লাহ
-              সাঈদ, একজন ওয়েব ডেভেলপার ও প্রযুক্তিপ্রেমী। ফেডারেল ব্লাড ওয়েভের
+              সাঈদ, একজন প্রোগ্রামার ও প্রযুক্তিপ্রেমী। ফেডারেল ব্লাড ওয়েভের
               প্রতিষ্ঠাতা হিসেবে আমার লক্ষ্য হচ্ছে প্রযুক্তিকে মানবতার সেবায়
-              কাজে লাগানো। আমি দীর্ঘদিন ধরে ওয়েব প্রযুক্তির সঙ্গে জড়িত এবং
+              কাজে লাগানো। আমি দীর্ঘদিন ধরে প্রযুক্তির সঙ্গে জড়িত এবং
               সমাজসেবামূলক কাজে আগ্রহী। রক্তের জন্য মানুষের আকুলতা দেখে আমি এই
               উদ্যোগ শুরু করি। এটি শুধু একটি প্ল্যাটফর্ম নয়, বরং একটি কমিউনিটির
               অংশ। আমার ইচ্ছা, প্রতিটি মানুষ যেন প্রয়োজনে নিরাপদ রক্ত পেতে
@@ -115,9 +115,6 @@ const About = () => {
             </Link>
             <Link to={"https://www.facebook.com/profile.php?id=100040632451349"} target="_blank">
               <FontAwesomeIcon icon={faFacebook} />
-            </Link>
-            <Link to={"https://github.com/heyabdullahbruh"} target="_blank">
-              <FontAwesomeIcon icon={faGithub} />
             </Link>
             <Link to={"https://abdullah-shayed.vercel.app/about"} target="_blank">
               <FontAwesomeIcon icon={faEarth} />
