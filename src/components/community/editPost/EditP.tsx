@@ -12,7 +12,7 @@ const EditP = ({ open, setOpen, postData, setPostData }: { open: boolean; setOpe
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { token } = useAuth();
+  const { profData, token, logout } = useAuth();
 
   let { photos = [], _id } = postData ? postData : {};
 
@@ -104,6 +104,14 @@ const EditP = ({ open, setOpen, postData, setPostData }: { open: boolean; setOpe
       });
 
       const getData = await response.json();
+      const message = getData?.message?.toLowerCase() || "";
+
+      if (message.includes("jwt expired") || response.status === 401 || response.status === 403) {
+        logout();
+        setOpen(false);
+        return;
+      }
+
       setPopInfo({
         trigger: Date.now(),
         type: getData?.success,

@@ -24,7 +24,7 @@ import NotificationBell from "../ui/NotificationBell";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isAuth, token, setAccessToken } = useAuth();
+  const { isAuth, token, logout } = useAuth();
   const [popInfo, setPopInfo] = useState<{ trigger: number | null; type: any; message: any }>({
     trigger: null,
     type: null,
@@ -35,37 +35,19 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
-  // Close menu on route change
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [location.pathname]);
-
   const handleLogOut = async () => {
     try {
-      const response = await axios.post(`${api}/donor/signOut`, {}, {
+      // Still try to call signOut to clear backend session/cookies
+      await axios.post(`${api}/donor/signOut`, {}, {
         headers: { authorization: `Bearer ${token}` },
         withCredentials: true,
       });
-
-      const data = response.data;
-      setPopInfo({
-        trigger: Date.now(),
-        type: data?.success,
-        message: data?.message,
-      });
-
-      if (data?.success) {
-        setAccessToken(null);
-        navigate("/", { replace: true });
-        window.location.reload();
-      }
-    } catch (error: any) {
-      console.error("Logout failed", error);
-      setPopInfo({
-        trigger: Date.now(),
-        type: false,
-        message: error.message || "Logout failed",
-      });
+    } catch (error) {
+      console.error("SignOut API call failed", error);
+    } finally {
+      logout();
+      navigate("/", { replace: true });
+      window.location.reload();
     }
   };
 

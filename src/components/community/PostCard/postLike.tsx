@@ -1,55 +1,69 @@
 import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
+import { Heart } from "lucide-react";
 import styles from "./postcard.module.css";
 import { useAuth } from "../../../context/AuthContext";
 import { api } from "../../../db/api";
 
-export default function PostLike({ postId, pLikes }) {
-  const { profData ,token} = useAuth();
+export default function PostLike({ postId, pLikes }: { postId: string; pLikes: string[] }) {
+  const { profData, token, logout } = useAuth();
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(pLikes);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
-    setLiked(pLikes.includes(profData?._id));
+    setLiked(pLikes.includes(profData?._id as string));
   }, [profData, pLikes]);
 
-  const handleClick = () => {
-    setLiked(!liked); // Toggle like state
+  const handleClick = async () => {
+    const prevLiked = liked;
+    const prevLikes = likes;
+    
+    // Optimistic update
+    setLiked(!prevLiked);
+    if (!prevLiked) {
+      setLikes([...prevLikes, profData?._id as string]);
+    } else {
+      setLikes(prevLikes.filter(id => id !== profData?._id));
+    }
 
-    fetch(`${api}/community/like/${postId}`, {
-      method: "PATCH",
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res?.likes?.find((i) => i === profData?._id)) {
-          setLiked(true);
-          setLikes(res?.likes);
-          setMessage(res?.message);
-        } else {
-          setMessage(res?.message);
-          setLikes(res?.likes);
-          setLiked(false);
-        }
-      })
-      .catch((err) => console.log(err));
+    try {
+      const response = await fetch(`${api}/community/like/${postId}`, {
+        method: "PATCH",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      const message = data?.message?.toLowerCase() || "";
+
+      if (message.includes("jwt expired") || response.status === 401 || response.status === 403) {
+        logout();
+        return;
+      }
+
+      if (data?.likes) {
+        setLikes(data.likes);
+        setLiked(data.likes.includes(profData?._id));
+      }
+    } catch (err) {
+      console.error("Like failed", err);
+      // Rollback on error
+      setLiked(prevLiked);
+      setLikes(prevLikes);
+    }
   };
-// console.log(message);
+
   return (
     <div className={styles.wrapper}>
       <button
         className={`${styles.iconBtn} ${liked ? styles.liked : ""}`}
         onClick={handleClick}
+        aria-label={liked ? "Unlike" : "Like"}
       >
-        <FontAwesomeIcon icon={liked ? solidHeart : regularHeart} />
+        <Heart size={20} fill={liked ? "currentColor" : "none"} />
       </button>
       <span className={styles.likeText}>
-        {likes.length > 0 ? `${likes.length} likes` : ""}
+        {likes.length > 0 ? `${likes.length} ${likes.length === 1 ? 'like' : 'likes'}` : ""}
       </span>
     </div>
   );

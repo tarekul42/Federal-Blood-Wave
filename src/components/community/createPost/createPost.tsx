@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 
 export default function CreatePost({ setOpen, setNewPost }: { setOpen: any; setNewPost: any }) {
   const { t } = useTranslation();
-  const { profData, token } = useAuth();
+  const { profData, token, logout } = useAuth();
 
   const [caption, setCaption] = useState("");
   const [imageFiles, setImageFiles] = useState<File[]>([]);
@@ -58,6 +58,14 @@ export default function CreatePost({ setOpen, setNewPost }: { setOpen: any; setN
       });
 
       const getData = await response.json();
+      const message = getData?.message?.toLowerCase() || "";
+
+      if (message.includes("jwt expired") || response.status === 401 || response.status === 403) {
+        logout();
+        setOpen(false);
+        return;
+      }
+
       setPopInfo({
         trigger: Date.now(),
         type: getData?.success,

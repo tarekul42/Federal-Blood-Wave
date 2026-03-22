@@ -25,5 +25,6 @@ export interface AuthContextType {
   profData: Partial<Donor>;
   token: string | null;
   setAccessToken: (token: string | null) => void;
+  logout: () => void;
   isLoading: boolean;
 }

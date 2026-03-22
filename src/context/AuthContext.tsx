@@ -96,6 +96,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     init();
   }, []);
 
+  const logout = () => {
+    setAccessToken(null);
+    setProfData({});
+    setIsAuth(false);
+    localStorage.removeItem("accessToken");
+    // Force a full redirect to clear any lingering protected states
+    window.location.href = "/";
+  };
+
   useEffect(() => {
     if (accessToken) {
       profileGet(accessToken);
@@ -104,7 +113,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuth, profData, token: accessToken, setAccessToken, isLoading: !isAppReady }}
+      value={{ isAuth, profData, token: accessToken, setAccessToken, logout, isLoading: !isAppReady }}
     >
       {children}
     </AuthContext.Provider>

@@ -208,14 +208,23 @@ const Profile = () => {
                 <button
                   disabled={isDonated || isLoading}
                   onClick={handleBloodDonateUpdate}
-                  className={styles.updateBtn}
+                  className={`${styles.updateBtn} ${isDonated ? styles.updateBtnDisabled : ""}`}
                 >
-                  {isLoading ? <RefreshCcw size={24} className={styles.spin} /> : <Droplets size={24} />}
-                  {isDonated ? t("profile.status_updated") : t("profile.update_status")}
-                  
-                  {isDonated && (
-                    <div className={styles.tooltip}>
-                      {gender === "female" ? t("profile.female_wait_msg") : t("profile.male_wait_msg")}
+                  {isLoading ? (
+                    <RefreshCcw size={24} className={styles.spin} />
+                  ) : (
+                    <div className={styles.btnContent}>
+                      <Droplets size={24} />
+                      <div className={styles.btnText}>
+                        <span className={styles.mainBtnText}>
+                          {isDonated ? t("profile.status_updated") : t("profile.update_status")}
+                        </span>
+                        {isDonated && (
+                          <span className={styles.subBtnText}>
+                            {gender === "female" ? t("profile.female_wait_msg") : t("profile.male_wait_msg")}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   )}
                 </button>

@@ -5,6 +5,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { api } from "../../../db/api";
 import PostLike from "./postLike";
+import PostComments from "./PostComments";
 import EditP from "../editPost/EditP";
 import Popup from "../../popup/popup";
 import SfLoading from "../../loading/slfLoad";
@@ -26,6 +27,7 @@ const PostCard = ({ data }: { data: any }) => {
   const { t } = useTranslation();
   const { profData, token } = useAuth();
   const [currIndex, setCurrIndex] = useState(0);
+  const [isCommentOpen, setIsCommentOpen] = useState(false);
 
   const [popInfo, setPopInfo] = useState<{
     trigger: number | null;
@@ -264,11 +266,18 @@ const PostCard = ({ data }: { data: any }) => {
 
       <div className={styles.postDown}>
         <PostLike pLikes={likes} postId={_id} />
-        <button className={styles.commentBtn}>
+        <button 
+          className={styles.commentBtn}
+          onClick={() => setIsCommentOpen(!isCommentOpen)}
+        >
            <MessageSquare size={20} />
            <span>{t("community.comment") || "Comment"}</span>
         </button>
       </div>
+
+      {isCommentOpen && (
+        <PostComments postId={_id} />
+      )}
       <EditP
         open={editOpen}
         setOpen={setEditOpen}
