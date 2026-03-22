@@ -10,6 +10,14 @@ export interface Donor {
   isAvailable: boolean;
   phone: string;
   image?: string;
+  address?: string;
+  isSeak?: boolean;
+  location?: {
+    thana?: string;
+    upazila?: string;
+    district?: string;
+    division?: string;
+  };
 }
 
 export interface AuthContextType {

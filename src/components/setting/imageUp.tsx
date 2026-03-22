@@ -8,9 +8,13 @@ import { useAuth } from "../../context/AuthContext";
 const ImageUp = () => {
   const { profData ,token} = useAuth();
 
-  const [dp, setDp] = useState(null);
+  const [dp, setDp] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [popInfo, setPopInfo] = useState({
+  const [popInfo, setPopInfo] = useState<{
+    trigger: number | null;
+    type: boolean | null;
+    message: string | null;
+  }>({
     trigger: null,
     type: null,
     message: null,
@@ -27,16 +31,17 @@ const ImageUp = () => {
     if (profData) {
       setImage({
         ...image,
-        currentProfile: profData?.profile?.img,
+        currentProfile: profData?.image || "",
       });
     }
   }, [profData]);
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+    if (!files) return;
     const fileArray = Array.from(files);
 
-    setDp(e.target.files[0]);
+    setDp(files[0]);
     // Create previews for the selected images
     const previews = fileArray.map((file) => URL.createObjectURL(file));
     setImage({
@@ -46,10 +51,13 @@ const ImageUp = () => {
   };
 
   const formData = new FormData();
-  formData.append("donorImg", dp);
+  if (dp) {
+    formData.append("donorImg", dp);
+  }
 
-  const handlePhotoUpdate = async (e) => {
+  const handlePhotoUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!dp) return;
     setIsLoading(true);
 
     try {
@@ -86,35 +94,38 @@ const ImageUp = () => {
     }
   };
   return (
-    <section>
-      {/* Profile Photo Update */}
-      <form onSubmit={handlePhotoUpdate} className={styles.formCard}>
-        <h3>🖼️ Update Profile Picture</h3>
-        <div>
-          {(newProfile || currentProfile) && (
+      <form onSubmit={handlePhotoUpdate} style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <h3><span role="img" aria-label="avatar">🖼️</span> Profile Picture</h3>
+        
+        <div className={styles.imagePreviewWrapper}>
+          {(newProfile || currentProfile) ? (
             <img
               src={newProfile ? newProfile : currentProfile}
               alt={`profile`}
-              style={{
-                width: "150px",
-                height: "150px",
-                objectFit: "cover",
-                borderRadius: "50%",
-                border: "2px solid #d80032",
-                backgroundColor: "#0da533",
-              }}
+              className={styles.profileImage}
             />
+          ) : (
+            <div className={styles.profileImage} style={{ backgroundColor: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', color: '#cbd5e1' }}>
+              👤
+            </div>
           )}
+
+          <div className={styles.fileInputWrapper}>
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={handleImageChange} 
+              className={styles.fileInput}
+              id="avatar-upload"
+            />
+          </div>
         </div>
-        <div>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-        </div>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? <SfLoading /> : "Update Photo"}
+
+        <button type="submit" className={styles.submitBtn} disabled={isLoading || !dp} style={{ marginTop: 'auto' }}>
+          {isLoading ? <SfLoading /> : "Upload New Photo"}
         </button>
+        <Popup popInfo={popInfo} />
       </form>
-      <Popup popInfo={popInfo} />
-    </section>
   );
 };
 

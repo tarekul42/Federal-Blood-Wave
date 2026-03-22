@@ -10,10 +10,14 @@ import Popup from "../popup/popup";
 import { api } from "../../db/api";
 
 const Settings = () => {
-  const [phyCon, setPhyCon] = useState(null);
+  const [phyCon, setPhyCon] = useState<boolean | null>(null);
   const { profData ,token} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [popInfo, setPopInfo] = useState({
+  const [popInfo, setPopInfo] = useState<{
+    trigger: number | null;
+    type: boolean | null;
+    message: string | null;
+  }>({
     trigger: null,
     type: null,
     message: null,
@@ -21,10 +25,10 @@ const Settings = () => {
 
   useEffect(() => {
     if (profData) {
-      setPhyCon(profData?.isSeak);
+      setPhyCon(profData?.isSeak ?? null);
     }
   }, [profData]);
-  const handlePhyConUpdate = async (e) => {
+  const handlePhyConUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -66,57 +70,71 @@ const Settings = () => {
 
   return (
     <section className={styles.settingsPage}>
-      <h2>⚙️ Settings</h2>
+      <h2><span role="img" aria-label="settings">⚙️</span> Settings</h2>
 
-      {/* Profile Photo Update */}
+      <div className={styles.settingsGrid}>
+        {/* Profile Photo Update */}
+        <div className={styles.formCard}>
+          <ImageUp />
+        </div>
 
-      <ImageUp />
+        {/* Info Update */}
+        <div className={styles.formCard}>
+          <DonorInfuUpdate />
+        </div>
 
-      {/* Info Update */}
-      <DonorInfuUpdate />
+        {/* Physical Condition */}
+        <div className={styles.formCard}>
+          <form onSubmit={handlePhyConUpdate} style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <h3><span role="img" aria-label="health">🏥</span> Physical Condition</h3>
+            <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1rem' }}>
+              Update your current health status to let others know if you're available for donation.
+            </p>
+            {phyCon !== null && (
+              <div className={styles.segmentWrapper}>
+                <label
+                  className={`${styles.segment} ${!phyCon ? styles.active : ""}`}
+                >
+                  <input
+                    type="radio"
+                    name="health"
+                    checked={!phyCon}
+                    onChange={() => setPhyCon(false)}
+                  />
+                  Healthy & Ready
+                </label>
 
-      {/* Physical Condition */}
-      <form onSubmit={handlePhyConUpdate} className={styles.formCard}>
-        <h3>🏥 Physical Condition</h3>
-        {phyCon !== null && (
-          <div className={styles.segmentWrapper}>
-            <label
-              className={`${styles.segment} ${!phyCon ? styles.active : ""}`}
+                <label
+                  className={`${styles.segment} ${phyCon ? styles.active : ""}`}
+                >
+                  <input
+                    type="radio"
+                    name="health"
+                    checked={phyCon}
+                    onChange={() => setPhyCon(true)}
+                  />
+                  Currently Unwell
+                </label>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className={styles.submitBtn}
+              disabled={isLoading || phyCon === profData?.isSeak}
+              style={{ marginTop: 'auto' }}
             >
-              <input
-                type="radio"
-                name="health"
-                checked={!phyCon}
-                onChange={() => setPhyCon(false)}
-              />
-              I am good now.
-            </label>
+              {isLoading ? <SfLoading /> : "Update Status"}
+            </button>
+            <Popup popInfo={popInfo} />
+          </form>
+        </div>
 
-            <label
-              className={`${styles.segment} ${phyCon ? styles.active : ""}`}
-            >
-              <input
-                type="radio"
-                name="health"
-                checked={phyCon}
-                onChange={() => setPhyCon(true)}
-              />
-              I'm sick right now
-            </label>
-          </div>
-        )}
-
-        <button
-          type="submit"
-          disabled={isLoading || phyCon === profData?.isSeak}
-        >
-          {isLoading ? <SfLoading /> : "Update Physical Condition"}
-        </button>
-        <Popup popInfo={popInfo} />
-      </form>
-
-      {/* Password Update */}
-      <HandlePassUp />
+        {/* Password Update */}
+        <div className={styles.formCard}>
+          <HandlePassUp />
+        </div>
+      </div>
     </section>
   );
 };

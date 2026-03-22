@@ -9,7 +9,11 @@ const HandlePassUp = () => {
   const {token}=useAuth();
   const [passwords, setPasswords] = useState({ currentPass: "", newPass: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const [popInfo, setPopInfo] = useState({
+  const [popInfo, setPopInfo] = useState<{
+    trigger: number | null;
+    type: boolean | null;
+    message: string | null;
+  }>({
     trigger: null,
     type: null,
     message: null,
@@ -17,7 +21,7 @@ const HandlePassUp = () => {
 
   const { currentPass, newPass } = passwords;
 
-  const handlePasswordUpdate = async (e) => {
+  const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -58,36 +62,43 @@ const HandlePassUp = () => {
   };
 
   return (
-    <section>
-      <form onSubmit={handlePasswordUpdate} className={styles.formCard}>
-        <h3>🔒 Update Password</h3>
-        <div>
+      <form onSubmit={handlePasswordUpdate} style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <h3><span role="img" aria-label="password">🔒</span> Security Settings</h3>
+        <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1rem' }}>
+          Ensure your account stays secure by using a strong, unique password.
+        </p>
+        
+        <div className={styles.formGroup}>
+          <label htmlFor="currentPass">Current Password</label>
           <input
+            id="currentPass"
             type="password"
-            placeholder="Current Password"
+            placeholder="••••••••"
             onChange={(e) =>
               setPasswords({ ...passwords, currentPass: e.target.value })
             }
             required
           />
         </div>
-        <div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="newPass">New Password</label>
           <input
+            id="newPass"
             type="password"
-            placeholder="New Password"
+            placeholder="••••••••"
             onChange={(e) =>
               setPasswords({ ...passwords, newPass: e.target.value })
             }
             required
           />
         </div>
-        <button type="submit" disabled={isLoading}>
+
+        <button type="submit" className={styles.submitBtn} disabled={isLoading} style={{ marginTop: 'auto' }}>
           {isLoading ? <SfLoading /> : "Update Password"}
         </button>
+        <Popup popInfo={popInfo} />
       </form>
-
-      <Popup popInfo={popInfo} />
-    </section>
   );
 };
 

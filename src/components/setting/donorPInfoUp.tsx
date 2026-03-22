@@ -9,7 +9,11 @@ import Popup from "../popup/popup";
 const DonorInfuUpdate = () => {
   const { profData, token } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [popInfo, setPopInfo] = useState({
+  const [popInfo, setPopInfo] = useState<{
+    trigger: number | null;
+    type: boolean | null;
+    message: string | null;
+  }>({
     trigger: null,
     type: null,
     message: null,
@@ -34,7 +38,7 @@ const DonorInfuUpdate = () => {
 
   const { name, phone, address, thana } = info;
 
-  const handleInfoUpdate = async (e) => {
+  const handleInfoUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -69,47 +73,50 @@ const DonorInfuUpdate = () => {
   };
 
   return (
-    <section>
-      <form onSubmit={handleInfoUpdate} className={styles.formCard}>
-        <h3>📝 Update Info</h3>
+      <form onSubmit={handleInfoUpdate} style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <h3><span role="img" aria-label="info">📝</span> Personal Information</h3>
 
-        <div>
-          <label htmlFor="name">Name:</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="name">Full Name</label>
           <input
+            id="name"
             type="text"
             value={name}
             onChange={(e) => setInfo({ ...info, name: e.target.value })}
-            placeholder="Full Name"
+            placeholder="Enter your full name"
           />
         </div>
 
-        <div>
-          <label htmlFor="phone">Call:</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="phone">Phone Number</label>
           <input
+            id="phone"
             type="text"
             value={phone}
             onChange={(e) => setInfo({ ...info, phone: e.target.value })}
-            placeholder="Phone Number"
+            placeholder="Enter your phone number"
           />
         </div>
 
-        <div>
-          <label htmlFor="address">Address:</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="address">Address</label>
           <input
+            id="address"
             type="text"
             value={address}
             onChange={(e) => setInfo({ ...info, address: e.target.value })}
-            placeholder="Your Address"
+            placeholder="Street address, House No."
           />
         </div>
 
-        <div>
-          <label htmlFor="thana">Your Area:</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="thana">Area / Thana</label>
           <select
+            id="thana"
             value={thana}
             onChange={(e) => setInfo({ ...info, thana: e.target.value })}
           >
-            <option value={thana}>{thana}</option>
+            <option value="" disabled>Select your area</option>
             {dhakaThana?.map((area) => (
               <option value={area?.name} key={area?.id}>
                 {area?.name}
@@ -118,12 +125,11 @@ const DonorInfuUpdate = () => {
           </select>
         </div>
 
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? <SfLoading /> : "Update Info"}
+        <button type="submit" className={styles.submitBtn} disabled={isLoading} style={{ marginTop: 'auto' }}>
+          {isLoading ? <SfLoading /> : "Update Profile"}
         </button>
+        <Popup popInfo={popInfo} />
       </form>
-      <Popup popInfo={popInfo} />
-    </section>
   );
 };
 
