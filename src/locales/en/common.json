@@ -1,0 +1,255 @@
+{
+  "navbar": {
+    "home": "Home",
+    "community": "Community",
+    "profile": "Profile",
+    "settings": "Settings",
+    "join_us": "Join Us",
+    "about": "About",
+    "contact": "Contact",
+    "logout": "Logout",
+    "donate_us": "Donate Us",
+    "banner_text": "Your contribution will help us move forward"
+  },
+  "footer": {
+    "tagline": "Every drop counts. Federal Blood Wave is dedicated to connecting blood donors with those in need, building a stronger, healthier community together.",
+    "quick_links": "Quick Links",
+    "get_in_touch": "Get In Touch",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "our_impact": "Our Impact",
+    "impact_quote": "\"Connecting life with life. Join the wave of hope today.\"",
+    "join_donor": "Join as a Donor",
+    "copyright": "© 2025 Federal Blood Wave. All rights reserved.",
+    "made_with": "Made with",
+    "by": "by"
+  },
+  "home": {
+    "banner": {
+      "badge": "Save Lives, Donate Blood",
+      "heading_1": "One Drop for",
+      "heading_2": "Another Success",
+      "description": "Connecting heroes with those in need. Join our community of lifesavers and make a difference in someone's life today."
+    },
+    "stats": {
+      "blood_types": "Blood Types",
+      "donated_blood": "Donated Blood",
+      "patients_served": "Patients Served",
+      "total_donors": "Total Donors",
+      "join_btn": "Join As A Donor Today"
+    },
+    "features": {
+      "heading_why": "Why Choose",
+      "feat1_title": "Blood Donation Saves Lives",
+      "feat1_desc": "Every drop of blood holds the power to save a life. By donating blood, you can become a hero for someone. Join us in the simple, effective, and life-saving mission of blood donation.",
+      "feat2_title": "Health & Quality Standard",
+      "feat2_desc": "Your safety and the recipient's well-being are our top priorities. Strict testing and quality standards are ensured for every donation, making the process safe and reliable.",
+      "feat3_title": "A Community of Lifesavers",
+      "feat3_desc": "Together, we can create a network of hope. Federal Blood Wave connects willing donors with those in need, ensuring that no one has to wait for life-saving blood."
+    }
+  },
+  "about": {
+    "hero": {
+      "heading_1": "About",
+      "heading_2": "Us",
+      "description": "Federal Blood Wave is a purely humanitarian initiative established with the aim of bringing a major change to society through blood donation. By combining technology and humanity, we are working to build a healthy society."
+    },
+    "why_start": {
+      "heading": "Why did we start?",
+      "reasons": [
+        "To alleviate blood shortages and raise awareness",
+        "To find blood donors quickly in emergencies",
+        "To build a strong blood donation network",
+        "To ensure service to humanity using technology",
+        "To awaken empathy and humanity among people",
+        "To inspire the youth to volunteer"
+      ]
+    },
+    "mission": {
+      "heading": "Our Mission",
+      "text": "To ensure safe and free blood donation opportunities for everyone and create a strong database in every area."
+    },
+    "vision": {
+      "heading": "Our Vision",
+      "text": "Federal Blood Wave envisions an egalitarian society where no more lives are lost due to a lack of blood donors."
+    },
+    "working_areas": {
+      "heading": "We are currently working in",
+      "text": "Various areas of Dhaka city such as – ",
+      "areas": "Mirpur, Mohammadpur, Dhanmondi, Bashundhara, Gulshan, Uttara, Badda, Khilgaon, Malibagh, and Old Dhaka."
+    },
+    "founder": {
+      "heading_1": "About the",
+      "heading_2": "Founder",
+      "role": "Founder & Developer",
+      "quote": "\"I believe technology can bring major changes to society. Seeing people's desperation for blood, I started this initiative.\"",
+      "description": "I am Abdullah Shayed, a programmer and tech enthusiast. As the founder of Federal Blood Wave, my goal is to use technology in the service of humanity. I always believe that big changes are possible through technology. Everyone's cooperation is desired in this initiative.",
+      "direct_contact": "Direct Contact"
+    }
+  },
+  "contact": {
+    "heading_1": "Contact",
+    "heading_2": "Us",
+    "description": "Contact us for any questions, opinions, or cooperation.",
+    "info": {
+      "email": "Email",
+      "phone": "Mobile",
+      "office": "Office",
+      "office_address": "Dhaka, Bangladesh",
+      "support_hours": "Support Hours",
+      "support_time": "Everyday 9 AM - 9 PM"
+    },
+    "form": {
+      "name": "Your Name",
+      "email": "Your Email",
+      "subject": "Subject",
+      "message": "Your Message",
+      "message_placeholder": "Write your message here...",
+      "sending": "Sending...",
+      "send": "Send"
+    }
+  },
+  "search_donor": {
+    "blood_group": "Select Blood Group",
+    "area": "Select Your Area",
+    "search": "Search"
+  },
+  "donation_m": {
+    "heading": "Donate Us",
+    "description": "Your contribution will help us move forward"
+  },
+  "donors": {
+    "heading_find": "Find a",
+    "heading_donor": "Donor",
+    "search_placeholder": "Search by name or address...",
+    "filters": "Filters:",
+    "active_only": "Active Only",
+    "healthy_only": "Healthy Only",
+    "all_genders": "All Genders",
+    "male": "Male",
+    "female": "Female",
+    "reset": "Reset",
+    "no_donors": "No donors found",
+    "try_adjusting": "Try adjusting your filters or search query."
+  },
+  "donor_card": {
+    "ready": "Ready to Donate",
+    "on_break": "On Break",
+    "group": "Group",
+    "verified": "Verified Donor",
+    "view_details": "View Details"
+  },
+  "donor_modal": {
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "blood_group": "Blood Group",
+    "gender": "Gender",
+    "phone": "Phone",
+    "address": "Address",
+    "last_donation": "Last Donation",
+    "health_condition": "Health Condition",
+    "sick": "Sick",
+    "good": "Good"
+  },
+  "profile": {
+    "unverified_email_title": "Email Not Verified",
+    "unverified_email_desc": "Please verify your email to fully activate your account.",
+    "link_sent": "Link Sent",
+    "send_verification_link": "Send Verification Link",
+    "verified": "Verified",
+    "unverified": "Unverified",
+    "donated_recently": "Donated Recently",
+    "available_to_donate": "Available to Donate",
+    "donation_history": "Donation History",
+    "total_donations": "Total Donations",
+    "last_donation_date": "Last Donation Date",
+    "personal_info": "Personal Information",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "dob": "Date of Birth",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "height": "Height",
+    "weight": "Weight",
+    "status_updated": "Donation Status Updated",
+    "update_status": "Update Donation Status",
+    "female_wait_msg": "You can update again after 120 days",
+    "male_wait_msg": "You can update again after 90 days",
+    "edit_profile": "Edit Profile",
+    "not_provided": "Not provided",
+    "meters": "m",
+    "kilograms": "kg",
+    "fetch_error": "Unable to load profile",
+    "quick_links": "Quick Links",
+    "contact_us": "Contact Us",
+    "impact_title": "Our Impact",
+    "impact_text": "Every drop counts. Join the wave of hope today."
+  },
+  "auth": {
+    "login_heading": "Login",
+    "signup_heading": "Sign Up",
+    "full_name": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
+    "password": "Password",
+    "address": "Address",
+    "weight": "Weight (kg)",
+    "height": "Height",
+    "feet": "Feet",
+    "inch": "Inch",
+    "blood_group": "Blood Group",
+    "area": "Area in Dhaka city",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "dob": "Date of Birth",
+    "last_donation_date": "Last Donation Date",
+    "sick_q": "Are you sick right now?",
+    "yes": "Yes",
+    "no": "No",
+    "terms_msg": "By Accepting Our Terms & Conditions",
+    "terms": "Terms",
+    "register_btn": "Register",
+    "login_btn": "LOGIN",
+    "no_account": "Don't have any account",
+    "join_btn": "Join As A Donor",
+    "have_account": "Already Have An Account",
+    "login_link": "Log In",
+    "login_fail": "Login failed. Please try again.",
+    "reg_fail": "Registration failed. Please try again.",
+    "network_error": "Network error. Please check your connection.",
+    "body_not_prepared": "Your body is not prepared for blood donation.",
+    "promo_title": "Be the Reason Someone Smiles Today",
+    "promo_subtitle": "Join our community of lifesavers. Your donation can save up to 3 lives and bring hope to families in need.",
+    "trust_text": "Join 500+ Verified Donors",
+    "weak": "Weak",
+    "fair": "Fair",
+    "good": "Good",
+    "strong": "Strong"
+  },
+  "not_found": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you're looking for doesn't exist or has been moved.",
+    "go_back": "Go Back",
+    "back_home": "Back to Home"
+  },
+  "community": {
+    "share_experience": "Share your blood donation experience....",
+    "create_post": "Create Post",
+    "latest_posts": "Latest Posts",
+    "write_experience": "Write your experience...",
+    "add_photos": "Add Photos",
+    "add_more_photos": "Add More Photos",
+    "posting_publicly": "Posting publicly",
+    "post": "Post",
+    "edit_post": "Edit Post",
+    "link_copied": "Link copied to clipboard!",
+    "copy_link": "Copy Link",
+    "share": "Share",
+    "comment": "Comment"
+  }
+}
