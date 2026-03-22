@@ -131,11 +131,19 @@ export const useAuthForm = (onSuccess: () => void) => {
           ...formData,
           weight: weightNum,
           height: heightInMeters,
+          bloodGroup: formData.bloodGroup.replace("ev", ""), // Remove the 'ev' suffix for backend
           phone: "+880" + formData.phone,
-          thana: formData.thana.toLowerCase(),
+          lastDonationDate: formData.lastDonationDate || null,
+          thana: formData.thana, // Keep original casing
           dob: dobDate,
         }),
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Registration error details:", errorData);
+        throw new Error(errorData.message || `Server responded with status: ${response.status}`);
+      }
 
       const data = await response.json();
       setPopInfo({

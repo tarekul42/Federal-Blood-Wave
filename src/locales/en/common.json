@@ -212,6 +212,7 @@
     "login_link": "Log In",
     "login_fail": "Login failed. Please try again.",
     "reg_fail": "Registration failed. Please try again.",
+    "network_error": "Network error. Please check your connection.",
     "body_not_prepared": "Your body is not prepared for blood donation.",
     "promo_title": "Be the Reason Someone Smiles Today",
     "promo_subtitle": "Join our community of lifesavers. Your donation can save up to 3 lives and bring hope to families in need.",

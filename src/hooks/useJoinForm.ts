@@ -86,19 +86,25 @@ export const useJoinForm = (onSuccess: () => void) => {
           body: JSON.stringify({
             weight: weightNum,
             height: heightInMeters,
-            lastDonationDate,
+            lastDonationDate: lastDonationDate || null,
             dob: dobDate,
             name,
             mail,
             phone: "+880" + phone,
             password,
-            bloodGroup,
+            bloodGroup: bloodGroup.replace("ev", ""), // Remove the 'ev' suffix for backend
             address,
-            thana: thana.toLowerCase(),
+            thana, // Keep original casing from data.ts
             gender,
             isSick,
           }),
         });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Registration error details:", errorData);
+          throw new Error(errorData.message || `Server responded with status: ${response.status}`);
+        }
 
         const data = await response.json();
         setPopInfo({
@@ -113,8 +119,12 @@ export const useJoinForm = (onSuccess: () => void) => {
           }, 3000);
         }
       } catch (error) {
-        console.error(error);
-        setErr(t("auth.reg_fail"));
+        console.error("Submission error:", error);
+        if (error instanceof TypeError && error.message === "Failed to fetch") {
+          setErr(t("auth.network_error") || "Network error. Please check your connection.");
+        } else {
+          setErr(t("auth.reg_fail"));
+        }
       } finally {
         setIsLoading(false);
       }

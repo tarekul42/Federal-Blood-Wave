@@ -8,14 +8,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [isAppReady, setIsAppReady] = useState(false);
   const [profData, setProfData] = useState<Partial<Donor>>({});
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem("accessToken"));
+
+  // Persist token to localStorage
+  useEffect(() => {
+    if (accessToken) {
+      localStorage.setItem("accessToken", accessToken);
+    } else {
+      localStorage.removeItem("accessToken");
+    }
+  }, [accessToken]);
 
   const checkAuth = async () => {
+    if (!accessToken) return;
     try {
       const res = await fetch(`${api}/authorizeDonor`, {
         method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
         credentials: "include",
       });
+      if (res.status === 401) {
+        setAccessToken(null);
+        setIsAuth(false);
+        return;
+      }
       const data = await res.json();
       setIsAuth(data?.auth);
     } catch (error) {
@@ -24,13 +42,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const restoreSession = async () => {
+    if (!accessToken) return;
     try {
       const res = await fetch(`${api}/donor/refresh`, {
         method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
         credentials: "include",
       });
+      if (res.status === 401) {
+        setAccessToken(null);
+        return;
+      }
       const data = await res.json();
-      setAccessToken(data?.token);
+      if (data?.token) {
+        setAccessToken(data.token);
+      }
     } catch (err) {
       setAccessToken(null);
     }
@@ -45,6 +73,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         },
         credentials: "include",
       });
+      if (res.status === 401) {
+        setAccessToken(null);
+        return;
+      }
       const data = await res.json();
       setProfData(data?.donor || {});
     } catch (error) {
@@ -55,8 +87,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const init = async () => {
-      await checkAuth();
-      await restoreSession();
+      if (accessToken) {
+        await checkAuth();
+        await restoreSession();
+      }
       setIsAppReady(true);
     };
     init();
