@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 .pageWrapper {
   background-color: #f8fafc;
   min-height: 100vh;
@@ -109,54 +108,4 @@
     .openPost {
         padding: var(--spacing-4);
     }
-=======
-.community {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    gap: .2rem;
-}
-
-.community hr {
-    width: 80%;
-}
-
-.openPost input {
-    width: 20rem;
-    height: 3.5rem;
-    background-color: #08cae448;
-    cursor: pointer;
-    border-radius: 3rem;
-    border: 2px solid;
-    outline: none;
-    padding: .1rem 1rem;
-    font-size: .9rem;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    margin: .5rem 0;
-}
-
-.allPost{
-    display: grid;
-    gap: 1rem;
-    margin: 1rem 0;
-}
-
-@media (max-width:780px) {
-
-    .openPost input {
-        width: 22rem;
-        height: 3rem;
-        font-size: .8rem;
-    }
-}
-
-@media (max-width:480px) {
-
-    .openPost input {
-        width: 17rem;
-        height: 2.5rem;
-        font-size: .7rem;
-    }
->>>>>>> Stashed changes
 }
