@@ -242,19 +242,19 @@ const PostCard = ({ data }: { data: any }) => {
                 onClick={() => openShareWindow(shareLinks?.facebook)}
                 title="Facebook"
               >
-                <FontAwesomeIcon icon={faFacebook} size="xs" />
+                <FontAwesomeIcon icon={faFacebook} />
               </button>
               <button
                 onClick={() => openShareWindow(shareLinks?.twitter)}
                 title="X (Twitter)"
               >
-                <FontAwesomeIcon icon={faXTwitter} size="xs" />
+                <FontAwesomeIcon icon={faXTwitter} />
               </button>
               <button
                 onClick={() => openShareWindow(shareLinks?.linkedIn)}
                 title="LinkedIn"
               >
-                <FontAwesomeIcon icon={faLinkedin} size="xs" />
+                <FontAwesomeIcon icon={faLinkedin} />
               </button>
             </div>
           )}

@@ -208,7 +208,7 @@ const FounderSocial = ({ href, icon: Icon }: { href: string; icon: any }) => (
     target="_blank"
     className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 hover:text-primary hover:shadow-lg transition-all"
   >
-    <FontAwesomeIcon icon={Icon} size="xs" className="sr-only" />
+    <FontAwesomeIcon icon={Icon} />
   </Link>
 );
 
